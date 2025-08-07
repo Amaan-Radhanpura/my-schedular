@@ -1,0 +1,14 @@
+<!-- <form [formGroup]="event" (ngSubmit)='onSubmit()'> -->
+  
+        <input matInput formControlName="name1" name="name1">
+        <mat-form-field>
+  <mat-label>Choose a date</mat-label>
+  <input matInput formControlName="date" name="date" [matDatepicker]="picker">
+  <mat-hint>MM/DD/YYYY</mat-hint>
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+        <button mat-raised-button type="submit">Submit</button>
+
+<!-- 
+</form> -->
