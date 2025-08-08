@@ -3,22 +3,29 @@
 }
  
 ::ng-deep mwl-calendar-month-view .cal-cell {
-  border: 2px solid;
   border-radius: 8px;
   margin-bottom: 8px;
   margin-left: 8px;
   margin-right: 8px;
+  background-color: rgb(232, 230, 230);
 }
 
 :ng-deep mwl-calendar-month-view .cal-month-view .cal-event{
     display: none;
 }
 
-:ng-deep mwl-calendar-month-view .cal-month-view .cal-days .cal-cell-row {
-    border-bottom: 0px;
-}
 
 ::ng-deep .cal-time-label-column {
-  display: none;
+display: none !important;
 }
-
+::ng-deep .cal-day-headers {
+padding-left: 0 !important;
+}
+ 
+::ng-deep mwl-calendar-month-view .cal-day-badge {
+display: none !important;
+}
+ 
+::ng-deep mwl-calendar-month-view .cal-event {
+display: none !important;
+}

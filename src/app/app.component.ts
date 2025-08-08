@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {CalendarEvent,CalendarView} from 'angular-calendar'
 import {addDays,addWeeks,addMonths,startOfDay,endOfDay} from 'date-fns'
+import { DialougComponent } from './dialoug/dialoug.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -12,7 +14,7 @@ export class AppComponent {
   title = 'my-schedular';
   view:CalendarView=CalendarView.Month;
   CalendarView=CalendarView;
-
+constructor(private dialog:MatDialog){}
   viewDate:Date=new Date();
   //This is an predifned in the angular-calendar library to add any event in the calendar
   events:CalendarEvent[]=[
@@ -62,5 +64,10 @@ export class AppComponent {
       default:
         return this.viewDate;
     }
+  }
+
+  openAddEventDialog(){
+    const dialogRef=this.dialog.open(DialougComponent)
+   
   }
 }
