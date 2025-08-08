@@ -1,7 +1,10 @@
 <mat-toolbar color="primary">
   <span>Doctor Appointment Scheduler</span>
-  <input  type="radio"  value="month" [(ngModel)]="view">Month
-  <input type="radio"  value="week" [(ngModel)]="view">Week
+  <mat-radio-group [(ngModel)]="view">
+    <mat-radio-button value="month">Month</mat-radio-button>
+    <mat-radio-button value="week">Week</mat-radio-button>
+    <mat-radio-button (click)="listTable()">List</mat-radio-button>
+  </mat-radio-group>
   <button mat-button (click)="previous()"><</button>
   <span>{{viewDate | calendarDate:(view + 'ViewTitle')}}</span>
   <button mat-button (click)="next()">></button>
@@ -20,7 +23,6 @@
     [viewDate]="viewDate"
     [events]="events">
   </mwl-calendar-week-view>
-
 </div>
 
 <ng-template #customMonthCell let-day="day">
@@ -30,4 +32,29 @@
   </div>
 </ng-template>
 
-<!-- <app-dialoug></app-dialoug> -->
+  <div *ngIf="list" class="table">
+  <table mat-table [dataSource]="filteredData">
+    <ng-container matColumnDef="Title">
+    <th mat-header-cell *matHeaderCellDef> Title<input type="text" (input)="Title($event)"> </th>
+    <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Start">
+    <th mat-header-cell *matHeaderCellDef> Start <input type="text"></th>
+    <td mat-cell *matCellDef="let element"> {{element.start | date:'shortDate'}} </td>
+  </ng-container>
+   <ng-container matColumnDef="StartTime">
+    <th mat-header-cell *matHeaderCellDef> Start Time <input type="text"></th>
+    <td mat-cell *matCellDef="let element"> {{element.start | date:'shortTime'}} </td>
+  </ng-container>
+  <ng-container matColumnDef="End">
+    <th mat-header-cell *matHeaderCellDef> End
+      <input type="text"> </th>
+    
+    <td mat-cell *matCellDef="let element"> {{element.end | date:'shortTime'}} </td>
+  </ng-container>
+   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+

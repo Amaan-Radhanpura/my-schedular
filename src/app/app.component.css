@@ -29,3 +29,12 @@ display: none !important;
 ::ng-deep mwl-calendar-month-view .cal-event {
 display: none !important;
 }
+
+.table{
+  height: 100%;
+
+}
+
+::ng-deep .mat-mdc-radio-button .mdc-form-field {
+  color: white;
+}

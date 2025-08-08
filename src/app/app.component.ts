@@ -3,6 +3,7 @@ import {CalendarEvent,CalendarView} from 'angular-calendar'
 import {addDays,addWeeks,addMonths,startOfDay,endOfDay} from 'date-fns'
 import { DialougComponent } from './dialoug/dialoug.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DialougService } from './dialoug.service';
 
 
 @Component({
@@ -10,18 +11,22 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'my-schedular';
   view:CalendarView=CalendarView.Month;
   CalendarView=CalendarView;
-constructor(private dialog:MatDialog){}
+constructor(private service :DialougService){}
   viewDate:Date=new Date();
+  list:boolean=false;
+  displayedColumns=['Title','Start','StartTime','End']
+  filteredData=[]
   //This is an predifned in the angular-calendar library to add any event in the calendar
   events:CalendarEvent[]=[
     {
       start:new Date(2025,7,7,10,0),
       end:new Date(2025,7,7,12,0),
-      title:'Dr.Smit Patient A'
+      title:'Patient A'
+      
     },
     {
       start:new Date(2025,8,8,13,10),
@@ -29,6 +34,11 @@ constructor(private dialog:MatDialog){}
       title:'Patient B'
     }
   ]
+
+  ngOnInit(): void {
+    this.events = JSON.parse(localStorage.getItem('event'));
+    this.filteredData=this.events
+  }
 
   //This Function is to set the view that wether we need the month,Week or Day View
   setView(view:CalendarView){
@@ -65,9 +75,36 @@ constructor(private dialog:MatDialog){}
         return this.viewDate;
     }
   }
-
+  //
+ //my this function is mainly used to fetch thae data what ever the service has and will send where all the neww added events
+  //are getting added in the
   openAddEventDialog(){
-    const dialogRef=this.dialog.open(DialougComponent)
-   
+    this.service.openAddEventButton().subscribe(data=>
+    {
+      if(data){
+       this.events=[...this.events,{
+         start:new Date(data.Start),
+         end:new Date(data.End),
+         title:data.Title      
+       }]
+       localStorage.setItem('event',JSON.stringify(this.events));
+       console.log(this.events)
+      }
+    }
+  )
+  }
+
+  listTable(){
+    console.log("First click");
+    this.list=true;
+    console.log(this.list);  
+  }
+  searchText:string=''
+
+  Title(event:any){
+    if(event){
+      this.searchText=event.target.value
+      this.filteredData=this.events.filter(item=>item.title.toLowerCase().includes(this.searchText.toLowerCase()))
+    }
   }
 }

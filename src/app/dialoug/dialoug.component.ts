@@ -10,16 +10,15 @@ export class DialougComponent {
   event: FormGroup;
   constructor(private fb:FormBuilder,private dialogRef:MatDialogRef<DialougComponent>){
       this.event=this.fb.group({
-    title:['',Validators.required],
-    start:['',Validators.required],
-    end:['',Validators.required]
+    Title:['',Validators.required],
+    Start:['',Validators.required],
+    End:['',Validators.required]
   });
  
   }
   onSubmit(){
    if(this.event.valid){
-    console.log(this.event.value)
-    this.dialogRef.close()
+    this.dialogRef.close(this.event.value)
    }
   }
 
