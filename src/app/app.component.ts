@@ -21,24 +21,15 @@ constructor(private service :DialougService){}
   displayedColumns=['Title','Start','End']
   filteredData=[]
   //This is an predifned in the angular-calendar library to add any event in the calendar
-  events:CalendarEvent[]=[
-    {
-      start:new Date(2025,7,7,10,0),
-      end:new Date(2025,7,7,1,0),
-      title:'Patient A'
-      
-    },
-    {
-      start:new Date(2025,8,8,13,10),
-      end:new Date(2025,8,8,14,0),
-      title:'Patient B'
-    }
-  ]
+  events:CalendarEvent[]=[]
 
   
   ngOnInit(): void {
+    if(this.events){
     this.events = JSON.parse(localStorage.getItem('event'));
+  }
     this.filteredData=this.events
+
   }
 
 
@@ -104,13 +95,12 @@ constructor(private service :DialougService){}
     this.service.openAddEventButton().subscribe(data=>
     {
       if(data){
-       this.events=[...this.events,{
+       this.events.push({
          start:new Date(data.Start),
          end:new Date(data.End),
          title:data.Title      
-       }]
+       })
        localStorage.setItem('event',JSON.stringify(this.events));
-       console.log(this.events)
       }
     }
   )
