@@ -4,6 +4,7 @@ import {addDays,addWeeks,addMonths,startOfDay,endOfDay} from 'date-fns'
 import { DialougComponent } from './dialoug/dialoug.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DialougService } from './dialoug.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -15,10 +16,10 @@ export class AppComponent implements OnInit{
   title = 'my-schedular';
   view:CalendarView=CalendarView.Month;
   CalendarView=CalendarView;
-constructor(private service :DialougService){}
+constructor(private service :DialougService,private snack:MatSnackBar){}
   viewDate:Date=new Date();
   list:boolean=false;
-  displayedColumns=['Title','Start','End']
+  displayedColumns=['Title','Start','End','Actions']
   filteredData=[]
   //This is an predifned in the angular-calendar library to add any event in the calendar
   events:CalendarEvent[]=[]
@@ -32,18 +33,15 @@ constructor(private service :DialougService){}
 
   }
 
-
-   monthEvents() {
+  //This Function is mainly used when the data is fetched from localstorage is is returning date has string even after i am parsing it
+  //due to which the events were not getting printed because they are not an date object and the error was getting printed in console
+  //so to convert the string to date object this function does it where we use map which create a new array and a new object e of every events
+  //and after that in start and end with the help of new date it converts the string to the javascript date object 
+  //and then we return e where an spread operator is been used so that execpt start and end other values remain the same
+   Events() {
     return this.events.map(e => {
     let start = new Date(e.start);
     let end = new Date(e.end);
- 
-    if (start > end) {
-      const temp = start;
-      start = end;
-      end = temp;
-    }
- 
     return {
       ...e,
       start,
@@ -95,6 +93,15 @@ constructor(private service :DialougService){}
     this.service.openAddEventButton().subscribe(data=>
     {
       if(data){
+        const today=new Date()
+        today.setHours(0,0,0,0)
+        const eventDate=new Date(data.Start)
+        eventDate.setHours(0,0,0,0)
+        if(eventDate<today){
+          this.snack.open('Event cannot be added for previous dates','close')
+          return;
+        }
+
        this.events.push({
          start:new Date(data.Start),
          end:new Date(data.End),
@@ -131,6 +138,7 @@ constructor(private service :DialougService){}
     }
   }
 
+  //Function to search based on End
   End(event:any){
     console.log(event)
      if(event){
@@ -139,4 +147,10 @@ constructor(private service :DialougService){}
     }
   }
 
+
+  deleteEvent(index:number){
+    this.events.splice(index,1);
+    localStorage.setItem('event',JSON.stringify(this.events));
+    this.filteredData=this.events
+  }
 }

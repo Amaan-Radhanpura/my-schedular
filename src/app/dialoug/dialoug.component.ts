@@ -1,3 +1,4 @@
+import { Time } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog'; 
@@ -8,6 +9,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialougComponent {
   event: FormGroup;
+  
   constructor(private fb:FormBuilder,private dialogRef:MatDialogRef<DialougComponent>){
       this.event=this.fb.group({
     Title:['',Validators.required],
@@ -25,4 +27,7 @@ export class DialougComponent {
   onCancel(){
     this.dialogRef.close()
   }
+
+
+  datetime24h:Time
 }

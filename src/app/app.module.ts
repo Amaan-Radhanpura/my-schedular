@@ -20,6 +20,9 @@ import {MatDialogModule} from '@angular/material/dialog'
 import {MatInputModule} from '@angular/material/input'
 import {MatTableModule} from '@angular/material/table'
 import {MatRadioModule} from '@angular/material/radio'
+import {MatSnackBarModule} from '@angular/material/snack-bar'
+import {MatSelectModule} from '@angular/material/select'
+
 
 @NgModule({
   declarations: [
@@ -47,7 +50,9 @@ import {MatRadioModule} from '@angular/material/radio'
     MatDialogModule,
     MatInputModule,
     MatTableModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSnackBarModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
