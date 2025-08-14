@@ -19,11 +19,12 @@ export class AppComponent implements OnInit{
 constructor(private service :DialougService,private snack:MatSnackBar){}
   viewDate:Date=new Date();
   list:boolean=false;
-  displayedColumns=['Title','Start','End','Actions']
+  displayedColumns=['Title','Start','End','Reason','Actions']
   filteredData=[]
   //This is an predifned in the angular-calendar library to add any event in the calendar
-  events:CalendarEvent[]=[]
-
+  events:calendarEvent[]=[]
+  filter:string='All';
+  Reasons:string[]=['All','Fever','Cough','HeadAche']
   
   ngOnInit(): void {
     if(this.events){
@@ -105,7 +106,8 @@ constructor(private service :DialougService,private snack:MatSnackBar){}
        this.events.push({
          start:new Date(data.Start),
          end:new Date(data.End),
-         title:data.Title      
+         title:data.Title,
+         Reason:data.Reason
        })
        localStorage.setItem('event',JSON.stringify(this.events));
       }
@@ -114,8 +116,7 @@ constructor(private service :DialougService,private snack:MatSnackBar){}
   }
 
   listTable(){
-    this.list=true;
-    console.log(this.list);  
+    this.list=true; 
   }
 
   
@@ -147,10 +148,32 @@ constructor(private service :DialougService,private snack:MatSnackBar){}
     }
   }
 
-
+  //Delete an Event 
   deleteEvent(index:number){
     this.events.splice(index,1);
     localStorage.setItem('event',JSON.stringify(this.events));
     this.filteredData=this.events
   }
+
+  //Filter the data based on the Reason that has been entered
+  Filter(reason:string){
+    if(reason=='All'){
+      this.filteredData=this.events
+    }
+    else {
+      console.log(reason)
+      this.filteredData=this.events.filter(item=>{
+      return  item.Reason.includes(reason)
+      })
+      console.log(this.filteredData)
+    }
+  }
+  
+}
+
+interface calendarEvent{
+  start:Date,
+  end:Date,
+  title:string,
+  Reason:string
 }

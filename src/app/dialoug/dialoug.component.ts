@@ -9,12 +9,13 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialougComponent {
   event: FormGroup;
-  
+  Reasons:string[]=['Fever','Cough','HeadAche']
   constructor(private fb:FormBuilder,private dialogRef:MatDialogRef<DialougComponent>){
-      this.event=this.fb.group({
+    this.event=this.fb.group({
     Title:['',Validators.required],
     Start:['',Validators.required],
-    End:['',Validators.required]
+    End:['',Validators.required],
+    Reason:['',Validators.required]
   });
  
   }

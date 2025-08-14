@@ -21,4 +21,5 @@ export interface event{
   Start:Date,
   End:Date,
   Title:string
+  Reason:string
 }

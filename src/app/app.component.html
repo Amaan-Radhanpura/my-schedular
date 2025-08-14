@@ -37,6 +37,14 @@
     <th mat-header-cell *matHeaderCellDef> End  <input type="text"  (input)="End($event)"></th>
     <td mat-cell *matCellDef="let element"> {{element.end }} </td>
   </ng-container>
+  <ng-container matColumnDef="Reason">
+    <th mat-header-cell *matHeaderCellDef> Reason
+    <mat-select [(ngModel)]="filter" (selectionChange)="Filter($event.value)">
+      <mat-option *ngFor="let reason of Reasons" [value]="reason" >{{reason}}</mat-option>
+    </mat-select>  
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.Reason }} </td>
+  </ng-container>
   <ng-container matColumnDef="Actions">
     <th mat-header-cell *matHeaderCellDef> Actions </th>
     <td mat-cell *matCellDef="let element; let i=index"> 
