@@ -20,17 +20,30 @@ constructor(private service :DialougService,private snack:MatSnackBar){}
   viewDate:Date=new Date();
   list:boolean=false;
   displayedColumns=['Title','Start','End','Reason','Actions']
-  filteredData=[]
+  filteredData =[]
   //This is an predifned in the angular-calendar library to add any event in the calendar
   events:calendarEvent[]=[]
   filter:string='All';
   Reasons:string[]=['All','Fever','Cough','HeadAche']
+
+  id:number
   
-  ngOnInit(): void {
-    if(this.events){
-    this.events = JSON.parse(localStorage.getItem('event'));
-  }
-    this.filteredData=this.events
+  ngOnInit() {
+    
+    // this.service.fetchEvents().subscribe(data=>{
+    //   console.log("hello");
+    //   console.log(data)
+    // })
+  //   if(this.events){
+  //   this.events = JSON.parse(localStorage.getItem('event'));
+  // }
+  //   this.filteredData=this.events
+  //   console.log(this.filteredData)
+  this.service.fetchEvents().subscribe((data)=>{
+   
+    console.log(data)
+    this.filteredData=data
+  })
 
   }
 
@@ -149,10 +162,12 @@ constructor(private service :DialougService,private snack:MatSnackBar){}
   }
 
   //Delete an Event 
-  deleteEvent(index:number){
-    this.events.splice(index,1);
-    localStorage.setItem('event',JSON.stringify(this.events));
-    this.filteredData=this.events
+  deleteEvent(rowData:any){
+    // this.events.splice(index,1);
+    this.id=rowData.id
+    console.log(this.id);
+    // localStorage.setItem('event',JSON.stringify(this.events));
+    // this.filteredData=this.events
   }
 
   //Filter the data based on the Reason that has been entered
