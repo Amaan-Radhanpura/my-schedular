@@ -9,8 +9,8 @@ class Events(BaseModel):
 
 
 class Token(BaseModel):
-    accessToken:str
-    tokenType:str
+    access_token:str
+    token_type:str
 
 class tokenData(BaseModel):
     username:str
@@ -19,6 +19,7 @@ class User(BaseModel):
     username:str
     email:str
     password:str
+
 
 class userInDb(User):
     hashedPassword:str

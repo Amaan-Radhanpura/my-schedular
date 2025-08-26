@@ -6,8 +6,9 @@ from typing import Annotated
 from Config.dataBase import sessionLocal,base,engine
 from sqlalchemy.orm import Session
 from Schemas.schema import Events
+from Auth.Auth import getCurrentUser
 
-event=APIRouter()
+event=APIRouter(tags=['Event'])
 Table.base.metadata.create_all(bind=engine)
 def getDb():
     db=sessionLocal()
@@ -17,7 +18,7 @@ def getDb():
         db.close()
 db_Dependency=Annotated[Session,Depends(getDb)]
 
-@event.post('/add_event')
+@event.post('/add_event',dependencies=[Depends(getCurrentUser)])
 def addEvent(event:Events,db:db_Dependency,status_code=status.HTTP_201_CREATED):
     db_event=Models.Table.Event(event.dict())
     db.add(db_event)
@@ -29,7 +30,7 @@ def fetchEvent(db:db_Dependency):
     Event=db.query(Models.Table.Event).all()
     return Event
 
-@event.delete('/deleteEvent')
+@event.delete('/deleteEvent',dependencies=[Depends(getCurrentUser)])
 def deleteEvent(id:int,db:db_Dependency):
     Event=db.query(Models.Table.Event).filter(Models.Table.Event.id==id).first()
     db.delete(Event)

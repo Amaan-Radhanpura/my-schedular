@@ -38,17 +38,14 @@ def getHashedPassword(password):
     return pwdContext.hash(password)
 
 def getUser(db:db_Dependency,username:str):
-    if username in db:
-        userData=db[username]
-        return db.query(Models.Table.User).filter(Models.Table.User.username==username).first()
+   return db.query(Models.Table.User).filter(Models.Table.User.username==username).first()
     
 def authenticateuser(db:db_Dependency,username:str,password:str):
     user=getUser(db,username)
     if not user:
         return False
-    if not verifyPassword(password,user.hashedPassword):
+    if not verifyPassword(password,user.password):
         return False
-    
     return user
 
 def createAccessToken(data:dict,expires_delta:timedelta=None):
@@ -73,7 +70,7 @@ async def getCurrentUser(db:db_Dependency,token:str=Depends(oauth_2_Scheme)):
     except JWTError:
         raise credentialException 
     user=getUser(db,username=token_Data.username)
-    if user in None:
+    if user is None :
         raise credentialException
 
     return user 
