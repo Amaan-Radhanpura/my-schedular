@@ -16,7 +16,7 @@ export class AppComponent implements OnInit{
   title = 'my-schedular';
   view:CalendarView=CalendarView.Month;
   CalendarView=CalendarView;
-constructor(private service :DialougService,private snack:MatSnackBar){}
+constructor(private service :DialougService,private snack:MatSnackBar,private dialog:MatDialog){}
   viewDate:Date=new Date();
   list:boolean=false;
   displayedColumns=['Title','Start','End','Reason','Actions']
@@ -41,8 +41,23 @@ constructor(private service :DialougService,private snack:MatSnackBar){}
   //   console.log(this.filteredData)
   this.service.fetchEvents().subscribe((data)=>{
    
-    console.log(data)
+    // console.log(data)
+    this.events=data.map(e => {
+    let start = new Date(e.Start);
+    let end = new Date(e.End);
+    let title=e.Title
+    let reason=e.Reason
+    return {
+      start,
+      end,
+      title,
+      reason
+    };
+  });
+  console.log(this.events);
+  
     this.filteredData=data
+
   })
 
   }
@@ -53,15 +68,9 @@ constructor(private service :DialougService,private snack:MatSnackBar){}
   //and after that in start and end with the help of new date it converts the string to the javascript date object 
   //and then we return e where an spread operator is been used so that execpt start and end other values remain the same
    Events() {
-    return this.events.map(e => {
-    let start = new Date(e.start);
-    let end = new Date(e.end);
-    return {
-      ...e,
-      start,
-      end
-    };
-  });
+    // console.log(this.events);
+    
+    return this.events
   }
 
   //This Function is to set the view that wether we need the month,Week or Day View
@@ -104,9 +113,12 @@ constructor(private service :DialougService,private snack:MatSnackBar){}
  //my this function is mainly used to fetch thae data what ever the service has and will send where all the neww added events
   //are getting added in the
   openAddEventDialog(){
-    this.service.openAddEventButton().subscribe(data=>
+    const  dialogRef=this.dialog.open(DialougComponent)
+    dialogRef.afterClosed().subscribe(data=>
     {
       if(data){
+        console.log(data);
+        
         const today=new Date()
         today.setHours(0,0,0,0)
         const eventDate=new Date(data.Start)
@@ -116,13 +128,26 @@ constructor(private service :DialougService,private snack:MatSnackBar){}
           return;
         }
 
-       this.events.push({
-         start:new Date(data.Start),
-         end:new Date(data.End),
-         title:data.Title,
-         Reason:data.Reason
-       })
-       localStorage.setItem('event',JSON.stringify(this.events));
+        const formattedEvent={
+          ...data,
+          Start:new Date(data.Start).toISOString().split('T')[0],
+          End:new Date(data.End).toISOString().split('T')[0]
+        }
+        this.service.addEvent(formattedEvent).subscribe({
+          next:(response)=>{console.log('event Added')
+   
+            
+          },
+           error:(err)=>{console.log(err);
+           }
+        })
+      //           this.events.push({
+      //    start:new Date(response.Start),
+      //    end:new Date(response.End),
+      //    title:response.Title,
+      //    Reason:response.Reason
+      //  })
+      //  localStorage.setItem('event',JSON.stringify(this.events));
       }
     }
   )
@@ -168,6 +193,16 @@ constructor(private service :DialougService,private snack:MatSnackBar){}
     console.log(this.id);
     // localStorage.setItem('event',JSON.stringify(this.events));
     // this.filteredData=this.events
+    this.service.deleteEvent(this.id).subscribe({
+      next:()=>{
+        console.log('Deleted Successfully')
+        this.snack.open('Event Deleted Successfully','close')
+      },
+      error:(err)=>{
+        console.log(err);
+        
+      }
+    })
   }
 
   //Filter the data based on the Reason that has been entered

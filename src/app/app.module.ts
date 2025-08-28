@@ -21,13 +21,15 @@ import {MatInputModule} from '@angular/material/input'
 import {MatTableModule} from '@angular/material/table'
 import {MatRadioModule} from '@angular/material/radio'
 import {MatSnackBarModule} from '@angular/material/snack-bar'
-import {MatSelectModule} from '@angular/material/select'
+import {MatSelectModule} from '@angular/material/select';
+import { UserComponent } from './user/user.component'
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    DialougComponent
+    DialougComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,

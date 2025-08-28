@@ -15,13 +15,13 @@
   <mwl-calendar-month-view class="month"
     *ngIf="view===CalendarView.Month && !list"
     [viewDate]="viewDate"
-    [events]="Events()"
+    [events]="events"
     [cellTemplate]="customMonthCell">
   </mwl-calendar-month-view>
   <mwl-calendar-week-view
     *ngIf="view===CalendarView.Week && !list"
     [viewDate]="viewDate"
-    [events]="Events()">
+    [events]="events">
   </mwl-calendar-week-view>
   <div *ngIf="list" class="table">
   <table mat-table [dataSource]="filteredData">
